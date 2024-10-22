@@ -1,0 +1,123 @@
+sil_stage raw
+
+import Builtin
+import Swift
+import SwiftShims
+
+class Dog {
+  func makeNoise()
+  final func makeNoiseFinal()
+  @objc deinit
+  init()
+}
+
+extension Dog {
+  func makeNoiseInExtension()
+  final func makeNoiseInExtensionFinal()
+}
+
+// main
+sil [ossa] @main : $@convention(c) (Int32, UnsafeMutablePointer<Optional<UnsafeMutablePointer<Int8>>>) -> Int32 {
+bb0(%0 : $Int32, %1 : $UnsafeMutablePointer<Optional<UnsafeMutablePointer<Int8>>>):
+  %2 = integer_literal $Builtin.Int32, 0          // user: %3
+  %3 = struct $Int32 (%2 : $Builtin.Int32)        // user: %4
+  return %3 : $Int32                              // id: %4
+} // end sil function 'main'
+
+// Dog.makeNoise()
+sil hidden [ossa] @class_vtable_static.Dog.makeNoise() -> () : $@convention(method) (@guaranteed Dog) -> () {
+// %0 "self"                                      // user: %1
+bb0(%0 : @guaranteed $Dog):
+  debug_value %0 : $Dog, let, name "self", argno 1, implicit // id: %1
+  %2 = tuple ()                                   // user: %3
+  return %2 : $()                                 // id: %3
+} // end sil function 'class_vtable_static.Dog.makeNoise() -> ()'
+
+// Dog.makeNoiseFinal()
+sil hidden [ossa] @class_vtable_static.Dog.makeNoiseFinal() -> () : $@convention(method) (@guaranteed Dog) -> () {
+// %0 "self"                                      // user: %1
+bb0(%0 : @guaranteed $Dog):
+  debug_value %0 : $Dog, let, name "self", argno 1, implicit // id: %1
+  %2 = tuple ()                                   // user: %3
+  return %2 : $()                                 // id: %3
+} // end sil function 'class_vtable_static.Dog.makeNoiseFinal() -> ()'
+
+// Dog.deinit
+sil hidden [ossa] @class_vtable_static.Dog.deinit : $@convention(method) (@guaranteed Dog) -> @owned Builtin.NativeObject {
+// %0 "self"                                      // users: %2, %1
+bb0(%0 : @guaranteed $Dog):
+  debug_value %0 : $Dog, let, name "self", argno 1, implicit // id: %1
+  %2 = unchecked_ref_cast %0 : $Dog to $Builtin.NativeObject // user: %3
+  %3 = unchecked_ownership_conversion %2 : $Builtin.NativeObject, @guaranteed to @owned // user: %4
+  return %3 : $Builtin.NativeObject               // id: %4
+} // end sil function 'class_vtable_static.Dog.deinit'
+
+// Dog.__deallocating_deinit
+sil hidden [ossa] @class_vtable_static.Dog.__deallocating_deinit : $@convention(method) (@owned Dog) -> () {
+// %0 "self"                                      // users: %6, %3, %1
+bb0(%0 : @owned $Dog):
+  debug_value %0 : $Dog, let, name "self", argno 1, implicit // id: %1
+  // function_ref Dog.deinit
+  %2 = function_ref @class_vtable_static.Dog.deinit : $@convention(method) (@guaranteed Dog) -> @owned Builtin.NativeObject // user: %4
+  %3 = begin_borrow %0 : $Dog                     // users: %5, %4
+  %4 = apply %2(%3) : $@convention(method) (@guaranteed Dog) -> @owned Builtin.NativeObject // user: %7
+  end_borrow %3 : $Dog                            // id: %5
+  end_lifetime %0 : $Dog                          // id: %6
+  %7 = unchecked_ref_cast %4 : $Builtin.NativeObject to $Dog // user: %8
+  dealloc_ref %7 : $Dog                           // id: %8
+  %9 = tuple ()                                   // user: %10
+  return %9 : $()                                 // id: %10
+} // end sil function 'class_vtable_static.Dog.__deallocating_deinit'
+
+// Dog.__allocating_init()
+sil hidden [exact_self_class] [ossa] @class_vtable_static.Dog.__allocating_init() -> class_vtable_static.Dog : $@convention(method) (@thick Dog.Type) -> @owned Dog {
+// %0 "$metatype"
+bb0(%0 : $@thick Dog.Type):
+  %1 = alloc_ref $Dog                             // user: %3
+  // function_ref Dog.init()
+  %2 = function_ref @class_vtable_static.Dog.init() -> class_vtable_static.Dog : $@convention(method) (@owned Dog) -> @owned Dog // user: %3
+  %3 = apply %2(%1) : $@convention(method) (@owned Dog) -> @owned Dog // user: %4
+  return %3 : $Dog                                // id: %4
+} // end sil function 'class_vtable_static.Dog.__allocating_init() -> class_vtable_static.Dog'
+
+// Dog.init()
+sil hidden [ossa] @class_vtable_static.Dog.init() -> class_vtable_static.Dog : $@convention(method) (@owned Dog) -> @owned Dog {
+// %0 "self"                                      // users: %2, %1
+bb0(%0 : @owned $Dog):
+  debug_value %0 : $Dog, let, name "self", argno 1, implicit // id: %1
+  %2 = mark_uninitialized [rootself] %0 : $Dog    // users: %4, %3
+  %3 = copy_value %2 : $Dog                       // user: %5
+  destroy_value %2 : $Dog                         // id: %4
+  return %3 : $Dog                                // id: %5
+} // end sil function 'class_vtable_static.Dog.init() -> class_vtable_static.Dog'
+
+// Dog.makeNoiseInExtension()
+sil hidden [ossa] @class_vtable_static.Dog.makeNoiseInExtension() -> () : $@convention(method) (@guaranteed Dog) -> () {
+// %0 "self"                                      // user: %1
+bb0(%0 : @guaranteed $Dog):
+  debug_value %0 : $Dog, let, name "self", argno 1, implicit // id: %1
+  %2 = tuple ()                                   // user: %3
+  return %2 : $()                                 // id: %3
+} // end sil function 'class_vtable_static.Dog.makeNoiseInExtension() -> ()'
+
+// Dog.makeNoiseInExtensionFinal()
+sil hidden [ossa] @class_vtable_static.Dog.makeNoiseInExtensionFinal() -> () : $@convention(method) (@guaranteed Dog) -> () {
+// %0 "self"                                      // user: %1
+bb0(%0 : @guaranteed $Dog):
+  debug_value %0 : $Dog, let, name "self", argno 1, implicit // id: %1
+  %2 = tuple ()                                   // user: %3
+  return %2 : $()                                 // id: %3
+} // end sil function 'class_vtable_static.Dog.makeNoiseInExtensionFinal() -> ()'
+
+sil_vtable Dog {
+  #Dog.makeNoise: (Dog) -> () -> () : @class_vtable_static.Dog.makeNoise() -> ()	// Dog.makeNoise()
+  #Dog.init!allocator: (Dog.Type) -> () -> Dog : @class_vtable_static.Dog.__allocating_init() -> class_vtable_static.Dog	// Dog.__allocating_init()
+  #Dog.deinit!deallocator: @class_vtable_static.Dog.__deallocating_deinit	// Dog.__deallocating_deinit
+}
+
+
+
+// Mappings from '#fileID' to '#filePath':
+//   'class_vtable_static/class_vtable_static.swift' => 'class_vtable_static.swift'
+
+

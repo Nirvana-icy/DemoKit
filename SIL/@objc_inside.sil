@@ -1,0 +1,146 @@
+sil_stage raw
+
+import Builtin
+import Swift
+import SwiftShims
+
+import Foundation
+
+@objc @_inheritsConvenienceInitializers class Dog : NSObject {
+  @objc func makeNoiseObjC()
+  @objc dynamic func makeNoiseDynamic()
+  override dynamic init()
+  @objc deinit
+}
+
+// main
+sil [ossa] @main : $@convention(c) (Int32, UnsafeMutablePointer<Optional<UnsafeMutablePointer<Int8>>>) -> Int32 {
+bb0(%0 : $Int32, %1 : $UnsafeMutablePointer<Optional<UnsafeMutablePointer<Int8>>>):
+  %2 = integer_literal $Builtin.Int32, 0          // user: %3
+  %3 = struct $Int32 (%2 : $Builtin.Int32)        // user: %4
+  return %3 : $Int32                              // id: %4
+} // end sil function 'main'
+
+// Dog.makeNoiseObjC()
+sil hidden [ossa] @test.Dog.makeNoiseObjC() -> () : $@convention(method) (@guaranteed Dog) -> () {
+// %0 "self"                                      // user: %1
+bb0(%0 : @guaranteed $Dog):
+  debug_value %0 : $Dog, let, name "self", argno 1, implicit // id: %1
+  %2 = tuple ()                                   // user: %3
+  return %2 : $()                                 // id: %3
+} // end sil function 'test.Dog.makeNoiseObjC() -> ()'
+
+// @objc Dog.makeNoiseObjC()
+sil hidden [thunk] [ossa] @@objc test.Dog.makeNoiseObjC() -> () : $@convention(objc_method) (Dog) -> () {
+// %0                                             // user: %1
+bb0(%0 : @unowned $Dog):
+  %1 = copy_value %0 : $Dog                       // users: %6, %2
+  %2 = begin_borrow %1 : $Dog                     // users: %5, %4
+  // function_ref Dog.makeNoiseObjC()
+  %3 = function_ref @test.Dog.makeNoiseObjC() -> () : $@convention(method) (@guaranteed Dog) -> () // user: %4
+  %4 = apply %3(%2) : $@convention(method) (@guaranteed Dog) -> () // user: %7
+  end_borrow %2 : $Dog                            // id: %5
+  destroy_value %1 : $Dog                         // id: %6
+  return %4 : $()                                 // id: %7
+} // end sil function '@objc test.Dog.makeNoiseObjC() -> ()'
+
+// Dog.makeNoiseDynamic()
+sil hidden [ossa] @test.Dog.makeNoiseDynamic() -> () : $@convention(method) (@guaranteed Dog) -> () {
+// %0 "self"                                      // user: %1
+bb0(%0 : @guaranteed $Dog):
+  debug_value %0 : $Dog, let, name "self", argno 1, implicit // id: %1
+  %2 = tuple ()                                   // user: %3
+  return %2 : $()                                 // id: %3
+} // end sil function 'test.Dog.makeNoiseDynamic() -> ()'
+
+// @objc Dog.makeNoiseDynamic()
+sil hidden [thunk] [ossa] @@objc test.Dog.makeNoiseDynamic() -> () : $@convention(objc_method) (Dog) -> () {
+// %0                                             // user: %1
+bb0(%0 : @unowned $Dog):
+  %1 = copy_value %0 : $Dog                       // users: %6, %2
+  %2 = begin_borrow %1 : $Dog                     // users: %5, %4
+  // function_ref Dog.makeNoiseDynamic()
+  %3 = function_ref @test.Dog.makeNoiseDynamic() -> () : $@convention(method) (@guaranteed Dog) -> () // user: %4
+  %4 = apply %3(%2) : $@convention(method) (@guaranteed Dog) -> () // user: %7
+  end_borrow %2 : $Dog                            // id: %5
+  destroy_value %1 : $Dog                         // id: %6
+  return %4 : $()                                 // id: %7
+} // end sil function '@objc test.Dog.makeNoiseDynamic() -> ()'
+
+// Dog.__allocating_init()
+sil hidden [ossa] @test.Dog.__allocating_init() -> test.Dog : $@convention(method) (@thick Dog.Type) -> @owned Dog {
+// %0 "$metatype"                                 // user: %1
+bb0(%0 : $@thick Dog.Type):
+  %1 = thick_to_objc_metatype %0 : $@thick Dog.Type to $@objc_metatype Dog.Type // user: %2
+  %2 = alloc_ref_dynamic [objc] %1 : $@objc_metatype Dog.Type, $Dog // user: %4
+  // function_ref dynamic Dog.init()
+  %3 = function_ref @dynamic test.Dog.init() -> test.Dog : $@convention(method) (@owned Dog) -> @owned Dog // user: %4
+  %4 = apply %3(%2) : $@convention(method) (@owned Dog) -> @owned Dog // user: %5
+  return %4 : $Dog                                // id: %5
+} // end sil function 'test.Dog.__allocating_init() -> test.Dog'
+
+// dynamic Dog.init()
+sil shared [transparent] [serializable] [thunk] [ossa] @dynamic test.Dog.init() -> test.Dog : $@convention(method) (@owned Dog) -> @owned Dog {
+// %0 "self"                                      // users: %2, %1
+bb0(%0 : @owned $Dog):
+  %1 = objc_method %0 : $Dog, #Dog.init!initializer.foreign : (Dog.Type) -> () -> Dog, $@convention(objc_method) (@owned Dog) -> @owned Dog // user: %2
+  %2 = apply %1(%0) : $@convention(objc_method) (@owned Dog) -> @owned Dog // user: %3
+  return %2 : $Dog                                // id: %3
+} // end sil function 'dynamic test.Dog.init() -> test.Dog'
+
+// Dog.init()
+sil hidden [ossa] @test.Dog.init() -> test.Dog : $@convention(method) (@owned Dog) -> @owned Dog {
+// %0 "self"                                      // user: %4
+bb0(%0 : @owned $Dog):
+  %1 = alloc_box ${ var Dog }, let, name "self"   // user: %2
+  %2 = mark_uninitialized [derivedself] %1 : ${ var Dog } // users: %15, %3
+  %3 = project_box %2 : ${ var Dog }, 0           // users: %14, %13, %5, %4
+  store %0 to [init] %3 : $*Dog                   // id: %4
+  %5 = load [take] %3 : $*Dog                     // user: %6
+  %6 = upcast %5 : $Dog to $NSObject              // users: %11, %7
+  %7 = begin_borrow %6 : $NSObject                // users: %10, %8
+  %8 = unchecked_ref_cast %7 : $NSObject to $Dog  // user: %9
+  %9 = objc_super_method %8 : $Dog, #NSObject.init!initializer.foreign : (NSObject.Type) -> () -> NSObject, $@convention(objc_method) (@owned NSObject) -> @owned NSObject // user: %11
+  end_borrow %7 : $NSObject                       // id: %10
+  %11 = apply %9(%6) : $@convention(objc_method) (@owned NSObject) -> @owned NSObject // user: %12
+  %12 = unchecked_ref_cast %11 : $NSObject to $Dog // user: %13
+  store %12 to [init] %3 : $*Dog                  // id: %13
+  %14 = load [copy] %3 : $*Dog                    // user: %16
+  destroy_value %2 : ${ var Dog }                 // id: %15
+  return %14 : $Dog                               // id: %16
+} // end sil function 'test.Dog.init() -> test.Dog'
+
+// @objc Dog.init()
+sil hidden [thunk] [ossa] @@objc test.Dog.init() -> test.Dog : $@convention(objc_method) (@owned Dog) -> @owned Dog {
+// %0                                             // user: %2
+bb0(%0 : @owned $Dog):
+  // function_ref Dog.init()
+  %1 = function_ref @test.Dog.init() -> test.Dog : $@convention(method) (@owned Dog) -> @owned Dog // user: %2
+  %2 = apply %1(%0) : $@convention(method) (@owned Dog) -> @owned Dog // user: %3
+  return %2 : $Dog                                // id: %3
+} // end sil function '@objc test.Dog.init() -> test.Dog'
+
+// Dog.__deallocating_deinit
+sil hidden [ossa] @test.Dog.__deallocating_deinit : $@convention(method) (@owned Dog) -> () {
+// %0 "self"                                      // users: %3, %2, %1
+bb0(%0 : @owned $Dog):
+  debug_value %0 : $Dog, let, name "self", argno 1, implicit // id: %1
+  %2 = objc_super_method %0 : $Dog, #NSObject.deinit!deallocator.foreign : (NSObject) -> () -> (), $@convention(objc_method) (NSObject) -> () // user: %4
+  %3 = upcast %0 : $Dog to $NSObject              // users: %5, %4
+  %4 = apply %2(%3) : $@convention(objc_method) (NSObject) -> ()
+  end_lifetime %3 : $NSObject                     // id: %5
+  %6 = tuple ()                                   // user: %7
+  return %6 : $()                                 // id: %7
+} // end sil function 'test.Dog.__deallocating_deinit'
+
+sil_vtable Dog {
+  #Dog.makeNoiseObjC: (Dog) -> () -> () : @test.Dog.makeNoiseObjC() -> ()	// Dog.makeNoiseObjC()
+  #Dog.deinit!deallocator: @test.Dog.__deallocating_deinit	// Dog.__deallocating_deinit
+}
+
+
+
+// Mappings from '#fileID' to '#filePath':
+//   'test/test.swift' => 'test.swift'
+
+

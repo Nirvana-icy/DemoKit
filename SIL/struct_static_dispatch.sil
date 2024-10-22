@@ -1,0 +1,59 @@
+sil_stage raw
+
+import Builtin
+import Swift
+import SwiftShims
+
+struct Dog {
+  func makeNoise()
+  init()
+}
+
+extension Dog {
+  func makeNoiseInExtension()
+}
+
+// main
+sil [ossa] @main : $@convention(c) (Int32, UnsafeMutablePointer<Optional<UnsafeMutablePointer<Int8>>>) -> Int32 {
+bb0(%0 : $Int32, %1 : $UnsafeMutablePointer<Optional<UnsafeMutablePointer<Int8>>>):
+  %2 = integer_literal $Builtin.Int32, 0          // user: %3
+  %3 = struct $Int32 (%2 : $Builtin.Int32)        // user: %4
+  return %3 : $Int32                              // id: %4
+} // end sil function 'main'
+
+// Dog.makeNoise()
+sil hidden [ossa] @Content.Dog.makeNoise() -> () : $@convention(method) (Dog) -> () {
+// %0 "self"                                      // user: %1
+bb0(%0 : $Dog):
+  debug_value %0 : $Dog, let, name "self", argno 1, implicit // id: %1
+  %2 = tuple ()                                   // user: %3
+  return %2 : $()                                 // id: %3
+} // end sil function 'Content.Dog.makeNoise() -> ()'
+
+// Dog.init()
+sil hidden [ossa] @Content.Dog.init() -> Content.Dog : $@convention(method) (@thin Dog.Type) -> Dog {
+// %0 "$metatype"
+bb0(%0 : $@thin Dog.Type):
+  %1 = alloc_box ${ var Dog }, let, name "self"   // user: %2
+  %2 = mark_uninitialized [rootself] %1 : ${ var Dog } // users: %5, %3
+  %3 = project_box %2 : ${ var Dog }, 0           // user: %4
+  %4 = load [trivial] %3 : $*Dog                  // user: %6
+  destroy_value %2 : ${ var Dog }                 // id: %5
+  return %4 : $Dog                                // id: %6
+} // end sil function 'Content.Dog.init() -> Content.Dog'
+
+// Dog.makeNoiseInExtension()
+sil hidden [ossa] @Content.Dog.makeNoiseInExtension() -> () : $@convention(method) (Dog) -> () {
+// %0 "self"                                      // user: %1
+bb0(%0 : $Dog):
+  debug_value %0 : $Dog, let, name "self", argno 1, implicit // id: %1
+  %2 = tuple ()                                   // user: %3
+  return %2 : $()                                 // id: %3
+} // end sil function 'Content.Dog.makeNoiseInExtension() -> ()'
+
+
+
+// Mappings from '#fileID' to '#filePath':
+//   'Content/Content.swift' => 'Content.swift'
+
+
