@@ -2,10 +2,13 @@
 
 Home for demo code.
 
-## SIL
+## [1. SIL](./SIL/Readme.md)
 
-swiftc -emit-silgen -Onone Content.swift | xcrun swift-demangle >> result.sil
+## 2. Turbor Module in action
 
-## Swift Dispatch
+## 3. View Flattening algorithm in C++
 
-## View Flattening algorithm in C++
+
+1. PAG
+
+2. 发热、卡顿问题排查与修复
