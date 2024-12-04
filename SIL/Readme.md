@@ -1,4 +1,4 @@
-# 【Swift SIL代码分析系列】@objc & dynamic inside
+# [【Swift SIL代码分析系列】@objc & dynamic inside](https://juejin.cn/post/7428393187725033512)
 
 > 配套Demo工程：
 > 
@@ -65,3 +65,6 @@ A2: v-table
 `VTable 的变化`：在 Swift 中，每个类都有一个虚函数表（VTable），它包含了类中所有方法的引用。
 
 对于 dynamic 方法，SIL 底部的 VTable 中不会包含该方法的引用，因为这个方法的实现可能在运行时改变，因此不能在编译时静态确定 。
+
+---
+Also avaliable in 掘金：[【Swift SIL代码分析系列】@objc & dynamic inside](https://juejin.cn/post/7428393187725033512)
