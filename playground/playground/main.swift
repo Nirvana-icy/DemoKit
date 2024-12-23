@@ -13,3 +13,6 @@ print(solution.twoSum(nums: [5, 3, 6, 9], target: 9))
 
 print(solution.twoSumValue(nums: [5, 3, 6, 9], target: 9))
 
+var nums = [5, 3, 6, 9]
+print(solution.twoSumValueB(nums: &nums, target: 9))
+

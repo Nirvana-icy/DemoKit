@@ -38,4 +38,31 @@ class Solution {
         
         return []
     }
+    
+    func twoSumValueB(nums: inout [Int], target: Int) -> [Int] {
+        //  [3, 6, 1, 2, 5]
+        var sortedIndex = 0
+        
+        while sortedIndex < nums.count {
+            var curIndex = sortedIndex + 1
+            while curIndex > 0 && curIndex < nums.count {
+                if nums[curIndex] < nums[curIndex - 1] {
+                    let tmp = nums[curIndex]
+                    nums[curIndex] = nums[curIndex - 1]
+                    nums[curIndex - 1] = tmp
+                }
+                curIndex -= 1
+            }
+            sortedIndex += 1
+        }
+        
+        for slowIndexValue in nums {
+            for fastInexValue in nums {
+                if slowIndexValue + fastInexValue == target {
+                    return [slowIndexValue, fastInexValue]
+                }
+            }
+        }
+        return []
+    }
 }
